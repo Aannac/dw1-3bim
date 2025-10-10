@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🧸 Plushies</title>
+  <link rel="stylesheet" href="menu.css">
+  <style>
+    /* Estilos do Carrinho */
+    .carrinho-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff9eb7, #ffc1d4);
+      border: none;
+      font-size: 32px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(255, 158, 183, 0.4);
+      transition: all 0.3s ease;
+      z-index: 999;
+    }
+
+    .carrinho-btn:hover {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 12px 35px rgba(255, 158, 183, 0.6);
+    }
+
+    .carrinho-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #d4507a;
+      color: white;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+      border: 3px solid white;
+    }
+
+    .modal-carrinho {
+      position: fixed;
+      top: 0;
+      right: -450px;
+      width: 450px;
+      height: 100vh;
+      background: white;
+      box-shadow: -5px 0 25px rgba(255, 158, 183, 0.3);
+      transition: right 0.3s ease;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      border-left: 3px solid #ffc1d4;
+    }
+
+    .modal-carrinho.active {
+      right: 0;
+    }
+
+    .carrinho-header {
+      padding: 25px;
+      background: linear-gradient(135deg, #ff9eb7, #ffc1d4);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-shadow: 2px 2px 4px rgba(212, 80, 122, 0.3);
+    }
+
+    .carrinho-header h2 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .btn-fechar-carrinho {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .btn-fechar-carrinho:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: rotate(90deg);
+    }
+
+    .carrinho-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      background: linear-gradient(135deg, #fff5f7 0%, #ffe4e9 100%);
+    }
+
+    .carrinho-vazio {
+      text-align: center;
+      padding: 60px 20px;
+      color: #8b5a7d;
+    }
+
+    .carrinho-vazio-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+    }
+
+    .carrinho-item {
+      background: white;
+      border-radius: 20px;
+      padding: 15px;
+      margin-bottom: 15px;
+      border: 3px solid #ffe4e9;
+      box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
+    }
+
+    .carrinho-item-info h4 {
+      margin: 0 0 5px 0;
+      color: #d4507a;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .carrinho-item-info p {
+      margin: 0;
+      color: #ff69b4;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .carrinho-item-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .btn-qty {
+      width: 35px;
+      height: 35px;
+      border: 2px solid #ff9eb7;
+      background: white;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: bold;
+      color: #ff69b4;
+      transition: all 0.2s ease;
+    }
+
+    .btn-qty:hover {
+      background: linear-gradient(135deg, #ff9eb7, #ffc1d4);
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .input-qty {
+      width: 60px;
+      height: 35px;
+      text-align: center;
+      border: 2px solid #ffe4e9;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #8b5a7d;
+    }
+
+    .btn-remove {
+      margin-left: auto;
+      background: #d4507a;
+      border: none;
+      width: 35px;
+      height: 35px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+      color: white;
+      transition: all 0.2s ease;
+    }
+
+    .btn-remove:hover {
+      transform: scale(1.1);
+      background: #b84066;
+    }
+
+    .carrinho-item-subtotal {
+      text-align: right;
+      font-weight: bold;
+      color: #d4507a;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+
+    .carrinho-footer {
+      padding: 20px;
+      border-top: 3px solid #ffc1d4;
+      background: white;
+    }
+
+    .total-carrinho {
+      display: flex;
+      justify-content: space-between;
+      font-size: 24px;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: linear-gradient(135deg, #fff5f7, #ffe4e9);
+      border-radius: 15px;
+      color: #d4507a;
+      font-weight: 700;
+      border: 2px solid #ffe4e9;
+    }
+
+    .btn-finalizar {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #ff9eb7, #ffc1d4);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 15px rgba(255, 158, 183, 0.3);
+    }
+
+    .btn-finalizar:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 158, 183, 0.5);
+      background: linear-gradient(135deg, #ff8fab, #ffb3c6);
+    }
+
+    .btn-limpar {
+      width: 100%;
+      padding: 15px;
+      background: white;
+      color: #8b5a7d;
+      border: 2px solid #ffc1d4;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-limpar:hover {
+      border-color: #ff9eb7;
+      color: #d4507a;
+      background: #fff5f7;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Sidebar Overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      ⚙️ Gerenciar
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="http://localhost:3001/cargo/abrirCrudCargo">👔 Cargo</a></li>
+      <li><a href="http://localhost:3001/forma_pagamento/abrirCrudForma_pagamento">💳 Forma de Pagamento</a></li>
+      <li><a href="http://localhost:3001/produto/abrirCrudProduto">🧸 Produto</a></li>
+      <li><a href="http://localhost:3001/pedido/abrirCrudPedido">📦 Pedido</a></li>
+      <li><a href="http://localhost:3001/pessoa/abrirCrudPessoa">👤 Pessoa</a></li>
+    </ul>
+  </aside>
+
+  <!-- Header -->
+  <header>
+    <div class="header-left">
+      <button class="menu-toggle" id="menuToggle">☰ Gerenciar</button>
+      <h1>🧸 Plushies</h1>
+    </div>
+    <select class="user-select" id="oUsuario" onchange="handleUserAction(this.value)">
+      <option value="">Berola da Silva</option>
+      <option value="gerenciar-conta">Gerenciar Conta</option>
+      <option value="sair">Sair</option>
+    </select>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <section class="welcome-section">
+      <h2>✨ Bem-vindo à nossa lojinha! ✨</h2>
+      <p>Aqui você encontra os pelúcias mais fofos e carinhosos para alegrar seu dia! 🎀</p>
+      <p>Cada pelúcia é feita com muito amor e carinho especialmente para você! 💕</p>
+    </section>
+
+    <section class="products-section">
+      <h2>🎁 Nossos Produtos Especiais</h2>
+      <div id="productsContainer" class="products-grid">
+        <div class="loading">Carregando produtos... 🧸</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>💖 2025 - Plushies - Feito com carinho para você! 🧸</p>
+  </footer>
+
+  <!-- Botão do Carrinho Flutuante -->
+  <button class="carrinho-btn" onclick="toggleCarrinho()">
+    🛒
+    <span class="carrinho-badge" id="carrinhoCount">0</span>
+  </button>
+
+  <!-- Modal do Carrinho -->
+  <div class="modal-carrinho" id="modalCarrinho">
+    <div class="carrinho-header">
+      <h2>🛒 Meu Carrinho</h2>
+      <button class="btn-fechar-carrinho" onclick="toggleCarrinho()">×</button>
+    </div>
+
+    <div class="carrinho-content">
+      <div class="carrinho-vazio" id="carrinhoVazio">
+        <div class="carrinho-vazio-icon">🧸</div>
+        <h3>Seu carrinho está vazio</h3>
+        <p>Adicione produtos para começar suas compras!</p>
+      </div>
+
+      <div id="carrinhoItens"></div>
+    </div>
+
+    <div class="carrinho-footer">
+      <div id="carrinhoTotal" style="display: none;"></div>
+      
+      <button class="btn-finalizar" id="btnFinalizarCompra" onclick="finalizarCompra()" style="display: none;">
+        💕 Finalizar Compra
+      </button>
+      
+      <button class="btn-limpar" onclick="limparCarrinho()">
+        🗑️ Limpar Carrinho
+      </button>
+    </div>
+  </div>
+
+  <script src="menu.js"></script>
+</body>
+
+</html>

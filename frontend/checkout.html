@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🧸 Finalizar Compra - Plushies</title>
+  <link rel="stylesheet" href="checkout.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <button type="button" class="btn-voltar" onclick="voltarMenu()">
+        ← Voltar ao Menu
+      </button>
+      <h1>🧸 Finalizar Compra</h1>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Resumo do Pedido -->
+    <section class="resumo-section">
+      <h2>📦 Resumo do Pedido</h2>
+      <div id="resumoPedido" class="resumo-itens">
+        <!-- Itens serão carregados dinamicamente -->
+      </div>
+      <div class="resumo-total">
+        <span>Total:</span>
+        <span class="valor-total">R$ <span id="valorTotal">0,00</span></span>
+      </div>
+    </section>
+
+    <!-- Formas de Pagamento -->
+    <section class="pagamento-section" id="pagamentoSection">
+      <h2>💳 Escolha a Forma de Pagamento</h2>
+      <div id="formasPagamento" class="formas-pagamento-grid">
+        <div class="loading">Carregando formas de pagamento... 💕</div>
+      </div>
+    </section>
+
+    <!-- Área de Pagamento PIX -->
+    <section id="pixSection" class="pix-section" style="display: none;">
+      <h2>✨ Pagamento via PIX</h2>
+      <div class="pix-info">
+        <p>Escaneie o QR Code abaixo com o app do seu banco:</p>
+      </div>
+      <div id="qrcodeContainer" class="qrcode-container"></div>
+      <button onclick="confirmarPagamento()" class="btn-confirmar-pagamento">
+        ✅ Confirmar Pagamento
+      </button>
+    </section>
+
+    <!-- Área de Pagamento com Cartão/Outros -->
+    <section id="outrosPagamentoSection" class="outros-pagamento-section" style="display: none;">
+      <h2>💳 Dados do Pagamento</h2>
+      
+      <div class="forma-selecionada-info">
+        <p>Forma de pagamento: <strong id="formaSelecionadaNome"></strong></p>
+        <p class="valor-info">Valor total: <strong>R$ <span id="valorTotalPagamento">0,00</span></strong></p>
+      </div>
+
+      <div class="pagamento-form">
+        <div class="form-group">
+          <label for="numeroCartao">Número do Cartão / Código:</label>
+          <input type="text" id="numeroCartao" placeholder="0000 0000 0000 0000" maxlength="19">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="validadeCartao">Validade:</label>
+            <input type="text" id="validadeCartao" placeholder="MM/AA" maxlength="5">
+          </div>
+          <div class="form-group">
+            <label for="cvvCartao">CVV:</label>
+            <input type="text" id="cvvCartao" placeholder="123" maxlength="4">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="nomeCartao">Nome no Cartão:</label>
+          <input type="text" id="nomeCartao" placeholder="Nome como está no cartão">
+        </div>
+
+        <button onclick="processarPagamentoOutros()" class="btn-processar-pagamento">
+          💕 Processar Pagamento
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>💖 2025 - Plushies - Feito com carinho para você! 🧸</p>
+  </footer>
+
+  <!-- Modal de Sucesso -->
+  <div id="modalSucesso" class="modal-sucesso">
+    <div class="modal-sucesso-content">
+      <div class="sucesso-icon">✨🎉✨</div>
+      <h2>Pedido Realizado com Sucesso!</h2>
+      <p>Seu pedido foi confirmado e será preparado com muito carinho! 💕</p>
+      <p class="numero-pedido">Número do Pedido: <strong id="numeroPedido">-</strong></p>
+      <button onclick="voltarParaLoja()" class="btn-voltar-loja">
+        🧸 Voltar para a Loja
+      </button>
+    </div>
+  </div>
+
+  <div id="messageContainer" class="message-container"></div>
+
+  <script src="checkout.js"></script>
+</body>
+
+</html>
