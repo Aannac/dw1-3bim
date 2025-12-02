@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios - Plushies</title>
+    <link rel="stylesheet" href="relatorio.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <button type="button" class="btn-voltar" onclick="voltarMenu()">
+                ← Voltar ao Menu
+            </button>
+            <h1>📊 Relatórios de Vendas</h1>
+        </div>
+    </header>
+
+    <main>
+        <!-- Resumo Geral -->
+        <section class="resumo-section">
+            <h2>📈 Resumo Geral</h2>
+            <div class="cards-grid" id="resumoCards">
+                <div class="card-resumo">
+                    <div class="card-icon">🛒</div>
+                    <div class="card-info">
+                        <span class="card-label">Total de Pedidos</span>
+                        <span class="card-value" id="totalPedidos">-</span>
+                    </div>
+                </div>
+                <div class="card-resumo">
+                    <div class="card-icon">👥</div>
+                    <div class="card-info">
+                        <span class="card-label">Total de Clientes</span>
+                        <span class="card-value" id="totalClientes">-</span>
+                    </div>
+                </div>
+                <div class="card-resumo">
+                    <div class="card-icon">📦</div>
+                    <div class="card-info">
+                        <span class="card-label">Itens Vendidos</span>
+                        <span class="card-value" id="totalItens">-</span>
+                    </div>
+                </div>
+                <div class="card-resumo">
+                    <div class="card-icon">💰</div>
+                    <div class="card-info">
+                        <span class="card-label">Valor Total</span>
+                        <span class="card-value" id="valorTotal">-</span>
+                    </div>
+                </div>
+                <div class="card-resumo">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-info">
+                        <span class="card-label">Ticket Médio</span>
+                        <span class="card-value" id="ticketMedio">-</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mês com Mais Vendas -->
+        <section class="relatorio-section">
+            <h2>📅 Vendas por Mês</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>🏆</th>
+                            <th>Mês</th>
+                            <th>Total de Pedidos</th>
+                            <th>Itens Vendidos</th>
+                            <th>Valor Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaMeses">
+                        <tr>
+                            <td colspan="5" class="loading">Carregando...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Clientes que Mais Compram -->
+        <section class="relatorio-section">
+            <h2>🌟 Top Clientes</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>🏆</th>
+                            <th>CPF</th>
+                            <th>Nome</th>
+                            <th>Pedidos</th>
+                            <th>Itens</th>
+                            <th>Valor Total</th>
+                            <th>Ticket Médio</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaClientes">
+                        <tr>
+                            <td colspan="7" class="loading">Carregando...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Produtos Mais Vendidos -->
+        <section class="relatorio-section">
+            <h2>🧸 Produtos Mais Vendidos</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>🏆</th>
+                            <th>ID</th>
+                            <th>Produto</th>
+                            <th>Preço Unit.</th>
+                            <th>Estoque Atual</th>
+                            <th>Pedidos</th>
+                            <th>Qtd. Vendida</th>
+                            <th>Valor Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaProdutos">
+                        <tr>
+                            <td colspan="8" class="loading">Carregando...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Vendas por Funcionário -->
+        <section class="relatorio-section">
+            <h2>👔 Vendas por Funcionário</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>🏆</th>
+                            <th>CPF</th>
+                            <th>Nome</th>
+                            <th>Cargo</th>
+                            <th>Pedidos</th>
+                            <th>Itens</th>
+                            <th>Valor Total</th>
+                            <th>Ticket Médio</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaFuncionarios">
+                        <tr>
+                            <td colspan="8" class="loading">Carregando...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>💖 2025 - Plushies - Relatórios de Gestão 📊</p>
+    </footer>
+
+    <div id="messageContainer" class="message-container"></div>
+
+    <script>
+        function voltarMenu() {
+            window.location.href = '../menu.html';
+        }
+    </script>
+
+    <script src="relatorio.js" defer></script>
+</body>
+</html>
