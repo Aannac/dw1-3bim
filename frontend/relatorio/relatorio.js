@@ -4,14 +4,346 @@ const API_BASE_URL = 'http://localhost:3001';
 // Elementos do DOM
 const messageContainer = document.getElementById('messageContainer');
 
-// Carregar todos os relatórios ao inicializar
-document.addEventListener('DOMContentLoaded', () => {
-    carregarResumoGeral();
-    carregarMesMaisVendas();
-    carregarClientesMaisCompram();
-    carregarProdutosMaisVendidos();
-    carregarVendasPorFuncionario();
-});
+// Função para voltar ao menu
+function voltarMenu() {
+    window.location.href = '../menu.html';
+}
+
+// Função para imprimir seção específica
+function imprimirTudo() {
+    const mainContent = document.querySelector('main').innerHTML;
+    const tituloRelatorio = document.querySelector('header h1').textContent;
+
+    const conteudoImpressao = `
+        <html>
+        <head>
+            <title>${tituloRelatorio} - Plushies</title>
+            <style>
+                @page {
+                    size: A4 landscape; /* Usar paisagem para o relatório completo */
+                    margin: 1.5cm;
+                }
+                
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                }
+                
+                body { 
+                    font-family: Arial, sans-serif; 
+                    padding: 15px;
+                    width: 100%;
+                    color: #000;
+                }
+                
+                h1 { 
+                    color: #d4507a; 
+                    border-bottom: 2px solid #ffc1d4; 
+                    padding-bottom: 10px;
+                    margin-bottom: 20px;
+                    font-size: 2.5em;
+                    text-align: center;
+                }
+                
+                h2 {
+                    color: #d4507a;
+                    font-size: 2.2em;
+                    margin-bottom: 15px;
+                    page-break-after: avoid;
+                }
+
+                section {
+                    margin-bottom: 20px;
+                    padding: 15px;
+                    border: 1px solid #ddd;
+                    border-radius: 8px;
+                    page-break-inside: avoid; /* Evita quebra de página dentro da seção */
+                    page-break-before: auto;
+                }
+
+                .relatorio-section {
+                    page-break-before: always; /* Força quebra de página antes de cada seção de relatório */
+                }
+                .resumo-section {
+                    page-break-before: auto;
+                }
+
+                .section-header {
+                    border-bottom: 2px solid #ffc1d4;
+                    padding-bottom: 5px;
+                    margin-bottom: 10px;
+                }
+                
+                table { 
+                    width: 100%; 
+                    border-collapse: collapse; 
+                    margin-top: 10px;
+                    table-layout: auto;
+                    font-size: 1.4em; /* Aumentado para melhor visualização */
+                    page-break-inside: avoid;
+                }
+                
+                th, td { 
+                    border: 1px solid #ddd; 
+                    padding: 8px 10px;
+                    text-align: left;
+                    word-wrap: break-word;
+                    
+                }
+                
+                th { 
+                    background-color: #ff9eb7; 
+                    color: white;
+                    font-weight: bold;
+                    font-size: 1.4em;
+                }
+                
+                tr:nth-child(even) { 
+                    background-color: #f9f9f9; 
+                }
+                tr {
+                    page-break-inside: avoid;
+                }
+                tr {
+                    page-break-inside: avoid;
+                }
+                
+                .valor-destaque {
+                    color: #d4507a;
+                    font-weight: bold;
+                }
+                
+                .ranking-medal {
+                    font-size: 2em;
+                }
+                
+                .print-date { 
+                    text-align: right; 
+                    color: #666; 
+                    font-size: 0.9em; 
+                    margin-top: 20px;
+                    padding-top: 10px;
+                    border-top: 1px solid #ddd;
+                }
+                
+                .cards-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr); /* Voltando para 4 colunas no paisagem */
+                    gap: 15px;
+                    margin-top: 15px;
+                }
+                
+                .card-resumo {
+                    border: 2px solid #ffc1d4;
+                    padding: 15px;
+                    border-radius: 10px;
+                    background: #fff5f7;
+                    text-align: center;
+                    page-break-inside: avoid;
+                }
+                
+                .card-icon {
+                    font-size: 2.5em;
+                    margin-bottom: 10px;
+                }
+                
+                .card-label {
+                    font-size: 1.4em;
+                    color: #666;
+                    font-weight: 600;
+                }
+                
+                .card-value {
+                    font-size: 2.2em;
+                    font-weight: bold;
+                    color: #d4507a;
+                }
+
+                /* Forçar a renderização de cores */
+                @media print {
+                    * {
+                        -webkit-print-color-adjust: exact;
+                        print-color-adjust: exact;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <h1>${tituloRelatorio}</h1>
+            ${mainContent}
+            <div class="print-date">Impresso em: ${new Date().toLocaleString('pt-BR')}</div>
+        </body>
+        </html>
+    `;
+
+    // Criar nova janela e imprimir
+    const janelaImpressao = window.open('', '_blank', 'width=1200,height=800');
+    janelaImpressao.document.write(conteudoImpressao);
+    janelaImpressao.document.close();
+    janelaImpressao.focus();
+    
+    setTimeout(() => {
+        janelaImpressao.print();
+    }, 500);
+}
+
+function imprimirSecao(secaoId) {
+    const secao = document.getElementById(secaoId);
+    if (!secao) {
+        mostrarMensagem('Seção não encontrada', 'error');
+        return;
+    }
+
+    const sectionElement = secao.closest('section');
+    const tituloSecao = sectionElement.querySelector('h2').textContent;
+    const conteudoSecao = secao.innerHTML;
+    
+    // Criar conteúdo para impressão com largura ajustada
+    const conteudoImpressao = `
+        <html>
+        <head>
+            <title>${tituloSecao} - Plushies</title>
+            <style>
+                @page {
+                    size: A4 landscape;
+                    margin: 1cm;
+                }
+                
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                }
+                
+                body { 
+                    font-family: Arial, sans-serif; 
+                    padding: 15px;
+                    width: 100%;
+                }
+                
+                h1 { 
+                    color: #d4507a; 
+                    border-bottom: 2px solid #ffc1d4; 
+                    padding-bottom: 10px;
+                    margin-bottom: 20px;
+                    font-size: 2.2em;
+                }
+                
+                table { 
+                    width: 100%; 
+                    border-collapse: collapse; 
+                    margin-top: 10px;
+                    table-layout: auto; page-break-inside: avoid;
+                    font-size: 2.2em;
+                }
+                
+                th, td { 
+                    border: 1px solid #ddd; 
+                    padding: 8px 10px;
+                    text-align: left;
+                    word-wrap: break-word;
+                }
+                
+                th { 
+                    background-color: #ff9eb7; 
+                    color: white;
+                    font-weight: bold;
+                    font-size: 0.9em;
+                }
+                
+                tr:nth-child(even) { 
+                    background-color: #f9f9f9; 
+                }
+                tr {
+                    page-break-inside: avoid;
+                }
+                tr {
+                    page-break-inside: avoid;
+                }
+                
+                .valor-destaque {
+                    color: #d4507a;
+                    font-weight: bold;
+                }
+                
+                .ranking-medal {
+                    font-size: 1.4em;
+                }
+                
+                .print-date { 
+                    text-align: right; 
+                    color: #666; 
+                   font-size: 1.4em; 
+                    margin-top: 15px;
+                    padding-top: 10px;
+                    border-top: 1px solid #ddd;
+                }
+                
+                .cards-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 12px;
+                    margin-top: 15px;
+                }
+                
+                .card-resumo {
+                    border: 2px solid #ffc1d4;
+                    padding: 12px;
+                    border-radius: 8px;
+                    background: #fff5f7;
+                    text-align: center;
+                }
+                
+                .card-icon {
+                    font-size: 2.5em;
+                    margin-bottom: 8px;
+                }
+                
+                .card-info {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                }
+                
+                .card-label {
+                    font-size: 0.8em;
+                    color: #666;
+                    font-weight: 600;
+                }
+                
+                .card-value {
+                    font-size: 2.2em;
+                    font-weight: bold;
+                    color: #d4507a;
+                }
+                
+                @media print {
+                    body {
+                        -webkit-print-color-adjust: exact;
+                        print-color-adjust: exact;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <h1>${tituloSecao}</h1>
+            ${conteudoSecao}
+            <div class="print-date">Impresso em: ${new Date().toLocaleString('pt-BR')}</div>
+        </body>
+        </html>
+    `;
+
+    // Criar nova janela e imprimir
+    const janelaImpressao = window.open('', '_blank', 'width=1200,height=800');
+    janelaImpressao.document.write(conteudoImpressao);
+    janelaImpressao.document.close();
+    janelaImpressao.focus();
+    
+    setTimeout(() => {
+        janelaImpressao.print();
+    }, 500);
+}
 
 // Função para mostrar mensagens
 function mostrarMensagem(texto, tipo = 'info') {
@@ -56,7 +388,6 @@ async function carregarResumoGeral() {
             document.getElementById('totalClientes').textContent = dados.total_clientes || 0;
             document.getElementById('totalItens').textContent = dados.total_itens_vendidos || 0;
             document.getElementById('valorTotal').textContent = formatarMoeda(dados.valor_total);
-            document.getElementById('ticketMedio').textContent = formatarMoeda(dados.ticket_medio);
             
         } else {
             throw new Error('Erro ao carregar resumo geral');
@@ -124,7 +455,7 @@ async function carregarClientesMaisCompram() {
                     <td>${item.total_pedidos || 0}</td>
                     <td>${item.total_itens || 0}</td>
                     <td class="valor-destaque">${formatarMoeda(item.valor_total)}</td>
-                    <td>${formatarMoeda(item.ticket_medio)}</td>
+                    <td>${formatarMoeda(item.valor_total / (item.total_pedidos || 1))}</td>
                 </tr>
             `).join('');
             
@@ -200,7 +531,7 @@ async function carregarVendasPorFuncionario() {
                     <td>${item.total_pedidos || 0}</td>
                     <td>${item.total_itens || 0}</td>
                     <td class="valor-destaque">${formatarMoeda(item.valor_total_vendas)}</td>
-                    <td>${formatarMoeda(item.ticket_medio)}</td>
+                    <td>${formatarMoeda(item.valor_total_vendas / (item.total_pedidos || 1))}</td>
                 </tr>
             `).join('');
             
@@ -214,3 +545,12 @@ async function carregarVendasPorFuncionario() {
         mostrarMensagem('Erro ao carregar vendas por funcionário', 'error');
     }
 }
+
+// Carregar todos os relatórios ao inicializar
+document.addEventListener('DOMContentLoaded', () => {
+    carregarResumoGeral();
+    carregarMesMaisVendas();
+    carregarClientesMaisCompram();
+    carregarProdutosMaisVendidos();
+    carregarVendasPorFuncionario();
+});

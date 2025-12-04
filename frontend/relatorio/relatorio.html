@@ -12,6 +12,9 @@
             <button type="button" class="btn-voltar" onclick="voltarMenu()">
                 ← Voltar ao Menu
             </button>
+            <button type="button" class="btn-imprimir" onclick="imprimirTudo()">
+                🖨️ Imprimir Tudo
+            </button>
             <h1>📊 Relatórios de Vendas</h1>
         </div>
     </header>
@@ -19,7 +22,9 @@
     <main>
         <!-- Resumo Geral -->
         <section class="resumo-section">
-            <h2>📈 Resumo Geral</h2>
+            <div class="section-header">
+                <h2>📈 Resumo Geral</h2>
+            </div>
             <div class="cards-grid" id="resumoCards">
                 <div class="card-resumo">
                     <div class="card-icon">🛒</div>
@@ -49,20 +54,18 @@
                         <span class="card-value" id="valorTotal">-</span>
                     </div>
                 </div>
-                <div class="card-resumo">
-                    <div class="card-icon">🎯</div>
-                    <div class="card-info">
-                        <span class="card-label">Ticket Médio</span>
-                        <span class="card-value" id="ticketMedio">-</span>
-                    </div>
-                </div>
             </div>
         </section>
 
         <!-- Mês com Mais Vendas -->
         <section class="relatorio-section">
-            <h2>📅 Vendas por Mês</h2>
-            <div class="table-container">
+            <div class="section-header">
+                <h2>📅 Vendas por Mês</h2>
+                <button class="btn-imprimir" onclick="imprimirSecao('vendas-mes')">
+                    🖨️ Imprimir Relatório
+                </button>
+            </div>
+            <div class="table-container" id="vendas-mes">
                 <table>
                     <thead>
                         <tr>
@@ -84,8 +87,13 @@
 
         <!-- Clientes que Mais Compram -->
         <section class="relatorio-section">
-            <h2>🌟 Top Clientes</h2>
-            <div class="table-container">
+            <div class="section-header">
+                <h2>🌟 Top Clientes</h2>
+                <button class="btn-imprimir" onclick="imprimirSecao('top-clientes')">
+                    🖨️ Imprimir Relatório
+                </button>
+            </div>
+            <div class="table-container" id="top-clientes">
                 <table>
                     <thead>
                         <tr>
@@ -109,8 +117,13 @@
 
         <!-- Produtos Mais Vendidos -->
         <section class="relatorio-section">
-            <h2>🧸 Produtos Mais Vendidos</h2>
-            <div class="table-container">
+            <div class="section-header">
+                <h2>🧸 Produtos Mais Vendidos</h2>
+                <button class="btn-imprimir" onclick="imprimirSecao('produtos-vendidos')">
+                    🖨️ Imprimir Relatório
+                </button>
+            </div>
+            <div class="table-container" id="produtos-vendidos">
                 <table>
                     <thead>
                         <tr>
@@ -135,8 +148,13 @@
 
         <!-- Vendas por Funcionário -->
         <section class="relatorio-section">
-            <h2>👔 Vendas por Funcionário</h2>
-            <div class="table-container">
+            <div class="section-header">
+                <h2>👔 Vendas por Funcionário</h2>
+                <button class="btn-imprimir" onclick="imprimirSecao('vendas-funcionario')">
+                    🖨️ Imprimir Relatório
+                </button>
+            </div>
+            <div class="table-container" id="vendas-funcionario">
                 <table>
                     <thead>
                         <tr>
@@ -166,12 +184,6 @@
 
     <div id="messageContainer" class="message-container"></div>
 
-    <script>
-        function voltarMenu() {
-            window.location.href = '../menu.html';
-        }
-    </script>
-
-    <script src="relatorio.js" defer></script>
+    <script src="relatorio.js"></script>
 </body>
 </html>
